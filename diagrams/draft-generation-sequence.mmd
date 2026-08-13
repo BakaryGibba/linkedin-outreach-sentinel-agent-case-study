@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant Op as Operator
+    participant API as Express API
+    participant DS as Drafting Service
+    participant AI as OpenAI Responses API
+    participant Val as Draft Validator
+
+    Op->>API: POST /api/outreach/:id/draft
+    API->>DS: generate(contact, campaign)
+    DS->>DS: build deterministic template as fallback
+    alt OPENAI_API_KEY configured
+        DS->>AI: responses.create(approved context only)
+        AI-->>DS: JSON { initial, followup }
+        DS->>Val: validateDraft(initial), validateDraft(followup)
+        alt validation passes
+            Val-->>DS: no errors
+            DS-->>API: { initial, followup, source: "openai" }
+        else validation fails or API errors
+            Val-->>DS: errors
+            DS-->>API: { ...template, source: "template", warnings }
+        end
+    else no API key
+        DS-->>API: { ...template, source: "template", warnings }
+    end
+    API->>API: transitionOutreach(-> draft_ready)
+    API-->>Op: draft + source + warnings

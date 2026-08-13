@@ -1,0 +1,65 @@
+stateDiagram-v2
+    [*] --> imported
+
+    imported --> needs_context
+    imported --> ready_for_draft
+    imported --> excluded
+    imported --> do_not_contact
+
+    needs_context --> ready_for_draft
+    needs_context --> excluded
+    needs_context --> do_not_contact
+
+    ready_for_draft --> draft_ready
+    ready_for_draft --> needs_context
+
+    draft_ready --> approved
+    draft_ready --> ready_for_draft
+
+    approved --> sending_initial
+    approved --> draft_ready
+
+    sending_initial --> sent_initial
+    sending_initial --> approved : safe pre-click failure
+
+    sent_initial --> followup_due
+    sent_initial --> replied
+    sent_initial --> meeting_booked
+    sent_initial --> not_interested
+    sent_initial --> completed
+
+    followup_due --> sending_followup
+    followup_due --> replied
+    followup_due --> meeting_booked
+    followup_due --> not_interested
+    followup_due --> completed
+
+    sending_followup --> sent_followup
+    sending_followup --> followup_due : safe pre-click failure
+
+    sent_followup --> replied
+    sent_followup --> no_response
+    sent_followup --> meeting_booked
+    sent_followup --> not_interested
+    sent_followup --> completed
+
+    replied --> meeting_booked
+    replied --> not_interested
+    replied --> completed
+
+    no_response --> completed
+    no_response --> do_not_contact
+
+    meeting_booked --> [*]
+    not_interested --> [*]
+    do_not_contact --> [*]
+    completed --> [*]
+    excluded --> [*]
+
+    note right of error
+        Any non-terminal status can
+        transition to error, and error
+        can recover to almost any status
+        after manual review. Omitted here
+        for readability.
+    end note

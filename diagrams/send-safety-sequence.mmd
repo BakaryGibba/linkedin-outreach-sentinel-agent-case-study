@@ -1,0 +1,33 @@
+sequenceDiagram
+    participant Op as Operator
+    participant API as Express API
+    participant Lock as Send Lock
+    participant PW as Playwright
+    participant LI as linkedin.com
+
+    Op->>API: POST /api/outreach/:id/send-linkedin
+    API->>API: check status in {approved, followup_due}
+    API->>API: check expectedVersion matches stored version
+    API->>API: check contact not already messaged in another campaign
+    API->>Lock: acquire lock (campaignId:contactId:phase)
+    API->>API: reserve status -> sending_initial / sending_followup
+    API->>PW: send({ profileUrl, firstName, message })
+    PW->>LI: goto(stored profile URL)
+    alt login/checkpoint/authwall detected
+        PW-->>API: throw "sign in required"
+        API->>API: revert reservation to error, keep lock released
+    else profile loaded
+        PW->>PW: verify page title matches firstName
+        PW->>LI: click Message
+        PW->>PW: locate message composer
+        PW->>PW: verify open conversation recipient matches profile name again
+        PW->>PW: verify no InMail subject is required
+        PW->>PW: fill composer, verify typed text == approved draft
+        PW->>PW: verify Send button enabled
+        PW->>LI: click Send
+        PW-->>API: { sent: true, sentAt }
+        API->>API: transition -> sent_initial / sent_followup
+        API->>API: schedule follow-up (+5 business days) if initial
+    end
+    API->>Lock: release lock
+    API-->>Op: result

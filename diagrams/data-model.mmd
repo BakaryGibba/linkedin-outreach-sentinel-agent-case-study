@@ -1,0 +1,71 @@
+erDiagram
+    CAMPAIGNS ||--o{ OUTREACH : "drives"
+    CONTACTS ||--o{ OUTREACH : "is target of"
+    OUTREACH ||--o{ ACTIVITY_LOG : "logs"
+    CAMPAIGNS ||--o{ ACTIVITY_LOG : "logs"
+    CONTACTS ||--o{ ACTIVITY_LOG : "logs"
+
+    CAMPAIGNS {
+        string campaign_id PK
+        string name
+        string state "draft/active/paused/completed"
+        string audience_criteria
+        string offer
+        string tone
+        string proof_points
+        string exclusions
+        string booking_url
+        string created_at
+        string updated_at
+    }
+
+    CONTACTS {
+        string contact_id PK
+        string first_name
+        string last_name
+        string linkedin_url
+        string email
+        string company
+        string position
+        string connected_on
+        string relationship_context
+        string qualification "unreviewed/qualified/excluded/needs_context"
+        string exclusion_reason
+        string do_not_contact
+        string source_fingerprint
+        string created_at
+        string updated_at
+    }
+
+    OUTREACH {
+        string outreach_id PK
+        string campaign_id FK
+        string contact_id FK
+        string status "18-value state machine"
+        string initial_draft
+        string followup_draft
+        string approved_at
+        string initial_sent_at
+        string followup_due_at
+        string followup_sent_at
+        string outcome
+        string outcome_at
+        string last_error
+        int version "optimistic concurrency"
+        string created_at
+        string updated_at
+    }
+
+    ACTIVITY_LOG {
+        string activity_id PK
+        string idempotency_key
+        string occurred_at
+        string actor
+        string entity_type
+        string entity_id
+        string action
+        string prior_status
+        string new_status
+        string note
+        string metadata_json
+    }

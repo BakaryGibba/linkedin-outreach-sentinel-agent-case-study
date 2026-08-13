@@ -1,0 +1,30 @@
+flowchart TD
+    Start{Import source}
+    Start -->|Official export| CSV[Parse Connections.csv]
+    Start -->|Live browser| Capture[Scroll and read visible connections page]
+
+    CSV --> Normalize[Normalize name, URL, company, position]
+    Capture --> Normalize
+
+    Normalize --> Identity[Derive stable contact_id from URL/email/name fingerprint]
+    Identity --> Dedup{Already seen in this batch?}
+    Dedup -->|Yes| DropDup[Count as duplicate, drop]
+    Dedup -->|No| Exclusion{Matches campaign exclusion keyword?}
+    Exclusion -->|Yes| Excluded[status: excluded]
+    Exclusion -->|No| Complete{Name + URL + company/position present?}
+    Complete -->|No| NeedsContext[status: needs_context]
+    Complete -->|Yes| ReadyForDraft[status: ready_for_draft]
+
+    Excluded --> Preview[Import preview: totals + sample]
+    NeedsContext --> Preview
+    ReadyForDraft --> Preview
+
+    Preview --> Suppress[Cross-campaign suppression pass]
+    Suppress --> Already[Already in this campaign?]
+    Suppress --> Messaged[Already messaged anywhere?]
+    Suppress --> DNC[Marked do_not_contact?]
+    Suppress --> Uncertain[Uncertain send in progress?]
+    Suppress --> ActiveElsewhere[Active pre-send elsewhere?]
+
+    Preview --> Commit[Operator commits preview]
+    Commit --> Sheets[(Contacts + Outreach + Activity Log)]

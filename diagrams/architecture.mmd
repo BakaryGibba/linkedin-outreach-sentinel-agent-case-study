@@ -1,0 +1,44 @@
+flowchart LR
+    subgraph Ops["Operator"]
+        Browser[Operator's Browser]
+        LiChrome[Persistent Playwright Chrome Profile]
+    end
+
+    subgraph App["Node.js / Express Application"]
+        UI[Static Dashboard SPA]
+        API[Express API]
+        Draft[Drafting Service]
+        RPA[LinkedIn Automation Service]
+        Importer[Connection Importer]
+        Config[Zod Config Loader]
+    end
+
+    subgraph Data["System of Record"]
+        Sheets[(Google Sheets)]
+        Campaigns[Campaigns Tab]
+        Contacts[Contacts Tab]
+        Outreach[Outreach Tab]
+        Activity[Activity Log Tab]
+        Sheets --- Campaigns
+        Sheets --- Contacts
+        Sheets --- Outreach
+        Sheets --- Activity
+    end
+
+    subgraph External["External Services"]
+        OpenAI[OpenAI Responses API]
+        LinkedIn[linkedin.com]
+    end
+
+    Browser --> UI
+    UI --> API
+    API --> Draft
+    API --> Importer
+    API --> RPA
+    API --> Sheets
+    Draft --> OpenAI
+    Draft -. fallback .-> Draft
+    RPA --> LiChrome
+    LiChrome --> LinkedIn
+    Importer -. official CSV export .-> Importer
+    Config --> API
