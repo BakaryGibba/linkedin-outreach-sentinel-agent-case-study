@@ -9,7 +9,11 @@
 > [!NOTE]
 > This repository is a sanitized engineering case study. It explains the architecture, workflows, safety boundaries, and engineering decisions behind an attended LinkedIn outreach system without exposing secrets, service-account credentials, browser session data, or real connection records.
 
-## Hero Overview
+| Context | Team | Status | My part |
+| --- | --- | --- | --- |
+| AI Engineering Internship, Apping Technology Sdn. Bhd. (2026) | Engineering team | Used by real users | [My contributions →](docs/12-my-contributions.md) |
+
+## Overview
 
 **Outreach Sentinel** (internally named "Apping AI RPA: Outreach") is an attended outreach system for existing LinkedIn connections. It imports LinkedIn's official connections export, drafts professional, fact-only messages with an AI-assisted fallback-safe writer, and lets an operator send the approved draft through a real, visible LinkedIn session using Playwright. Every record, transition, and send is tracked in Google Sheets with a full audit trail.
 
@@ -161,6 +165,17 @@ The live-browser "capture visible connections" and "send with LinkedIn" states a
 - Added a live "capture visible connections" RPA path as an alternative to CSV import, with the same suppression and qualification rules applied in-browser.
 - Reached 23 passing automated tests covering the domain state machine, drafting validation, CSV import, LinkedIn automation guards, config parsing, sheet setup, and end-to-end API behaviors.
 
+## Limitations
+
+What this case study does not show, and what the system does not yet do:
+
+- Source code, contact data and credentials are private; the test output and log excerpts in the docs are the public evidence.
+- Google Sheets is the system of record, and its per-minute read quota is reached under batch load (documented in [Challenges](docs/11-challenges.md)).
+- It is a single-operator tool: there is no authentication, and actions are attributed through one configured operator name.
+- LinkedIn selectors can change, and there is no periodic selector self-check yet.
+- The 23 automated tests cover domain rules, drafting, import, send guards and the API; the DOM-dependent send branches have no mocked Playwright fixtures yet.
+- Transient Google API errors are not retried automatically.
+
 ## Lessons Learned
 
 > [!IMPORTANT]
@@ -171,3 +186,13 @@ The live-browser "capture visible connections" and "send with LinkedIn" states a
 - Google Sheets is a fine system of record for pilot-scale outreach, but its per-minute read quota is a real operational constraint once activity volume grows — visible directly in this project's own request logs.
 - Treating "attended" as a first-class design constraint (not a temporary limitation) produces a safer, more auditable system than trying to make automation invisible.
 - Validating a draft in the same way at generation time, at approval time, and again immediately before the Send click closes the gap between "looked fine when written" and "still true when sent."
+
+---
+
+<div align="center">
+
+**Part of [Bakary Gibba's AI engineering portfolio](https://github.com/BakaryGibba/bakary-gibba-ai-engineering-portfolio)**
+
+[Portfolio website](https://bakary-gibba.vercel.app/) · [LinkedIn](https://www.linkedin.com/in/bakary-gibba-6409bb248/) · [Google Scholar](https://scholar.google.com/citations?user=bp0G4sgAAAAJ&hl=en)
+
+</div>
