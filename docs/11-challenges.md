@@ -42,7 +42,3 @@ to be visible
 ```
 
 Because this timeout occurs *before* `sendClicked` is set to `true`, the Express layer's failure handler safely reverted the reservation to `error` instead of leaving the record stuck in `sending_initial` — exactly the scenario the `sendClicked` flag exists to distinguish from a failure that happens after the click, where automatic reversal would risk a duplicate send.
-
-## Screenshot
-
-**Planned:** No dedicated screenshot; see the log excerpts above for direct evidence of these failure modes.

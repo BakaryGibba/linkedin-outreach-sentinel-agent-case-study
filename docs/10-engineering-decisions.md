@@ -42,7 +42,3 @@ Each layer is independently sufficient to abort the send. None of them trusts th
 ## Why Not a Real Database
 
 A Postgres- or SQLite-backed version of this system would remove the Sheets quota constraint and add real transactions. It was deliberately not chosen here because the target operator is not necessarily technical: being able to open the spreadsheet, see every campaign and contact, and understand the audit trail without a separate admin UI is a real product requirement for a small-scale, human-reviewed outreach tool. [13 Future Improvements](13-future-improvements.md) revisits this once volume grows past what Sheets can comfortably serve.
-
-## Screenshot
-
-**Planned:** No dedicated screenshot; this document is conceptual.

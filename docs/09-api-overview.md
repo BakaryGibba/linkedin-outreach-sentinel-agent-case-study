@@ -81,7 +81,3 @@ All routes are defined in `src/app.js` and mounted under `/api`, guarded by a si
 | `GET /api/report` | Status counts, optionally scoped to a campaign. |
 | `GET /api/export.csv` | Streams a CSV export of core outreach fields. |
 | `GET /api/outreach/:id/activity` | Returns the Activity Log entries for one outreach record. |
-
-## Screenshot
-
-**Planned:** No dedicated screenshot; the API surface is exercised through the dashboard captures listed in the [screenshot plan](../screenshots/README.md).
