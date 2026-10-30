@@ -2,6 +2,9 @@
 
 # 12 My Contributions
 
+> [!NOTE]
+> Built with the engineering team at Apping Technology Sdn. Bhd. during my AI Engineering internship (2026). This page describes my part of the work.
+
 ## Contribution Summary
 
 This was a full-stack build: the domain model and state machine, the Google Sheets repository with optimistic concurrency and audit logging, the AI drafting service and its fact-only validator, the Playwright automation service and its double-verification send flow, the CSV/live-capture import pipeline with cross-campaign suppression, the Express API and batch orchestration, the static dashboard frontend, the sheet setup script, and the automated test suite.
@@ -54,7 +57,3 @@ The core contribution is the safety architecture, not any single feature in isol
 
 23 tests, 23 pass, 0 fail
 ```
-
-## Screenshot
-
-**Planned:** No dedicated screenshot; see the test output above for direct evidence of coverage.

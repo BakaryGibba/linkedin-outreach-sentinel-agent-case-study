@@ -33,7 +33,3 @@ flowchart LR
     Vault --> RPA
     DB --> SheetsSync
 ```
-
-## Screenshot
-
-**Planned:** No dedicated screenshot; this document is forward-looking.
