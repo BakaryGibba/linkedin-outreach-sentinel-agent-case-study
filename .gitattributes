@@ -1,0 +1,4 @@
+diagrams/** linguist-documentation
+*.mmd linguist-detectable=false
+*.mermaid linguist-detectable=false
+*.md linguist-detectable=true
